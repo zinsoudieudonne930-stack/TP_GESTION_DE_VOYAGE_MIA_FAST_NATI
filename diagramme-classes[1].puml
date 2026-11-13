@@ -1,0 +1,60 @@
+@startuml
+title Gestion des réservations de vols — Agence de Cotonou
+
+class Passenger {
+  +id: int
+  +name: string
+  +phone: string
+  +email: string
+  +passport: string
+}
+
+class Flight {
+  +id: int
+  +code: string
+  +origin: string
+  +destination: string
+  +departure: string
+  +capacity: int
+  +price: double
+  +active: bool
+}
+
+class Reservation {
+  +id: int
+  +status: ReservationStatus
+  +createdAt: string
+  +paidAt: optional<string>
+}
+
+class Payment {
+  +amount: double
+  +method: string
+  +paidAt: string
+}
+
+class TravelAgency {
+  +addPassenger()
+  +addFlight()
+  +reserve()
+  +pay()
+  +cancel()
+  +listFlights()
+  +searchFlight()
+  +listReservations()
+}
+
+enum ReservationStatus {
+  EnAttente
+  Confirmee
+  Annulee
+}
+
+Passenger "1" -- "0..*" Reservation : effectue
+Flight "1" -- "0..*" Reservation : concerne
+Reservation "1" -- "0..1" Payment : est réglée par
+TravelAgency o-- "0..*" Passenger
+TravelAgency o-- "0..*" Flight
+TravelAgency o-- "0..*" Reservation
+Reservation --> ReservationStatus
+@enduml
